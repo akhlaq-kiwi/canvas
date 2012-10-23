@@ -19,8 +19,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	private int mx, my, game_id = 1;
 	private int rowsX = 9;
 	private int rowsY = 9;
-	public static boolean animating = true;
-	String filename = "red";
+	public static String filename = "red";
 	Context ctx;
 	boolean mDisableTouch = false;
 	private ArrayList<Element> mHead = new ArrayList<Element>();
@@ -48,7 +47,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	public void doDraw(Canvas canvas) {
         canvas.drawColor(Color.GRAY);
-        mElements = db.getAllElements();
+        //mElements = db.getAllElements();
         synchronized (mElements) {
             for (Element element : mElements) {
             	element.doDraw(canvas, this);
@@ -66,7 +65,8 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
             		tElement.doDraw(canvas, this);
             	}else{
             		db.addElement(tElement);
-            		mElements = db.getAllElements();
+            		mElements.add(tElement);
+            		//mElements = db.getAllElements();
             		synchronized (mElements) {
                         for (Element element : mElements) {
                         	element.doDraw(canvas, this);
@@ -110,14 +110,14 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		
 		int posX = (int)Math.ceil(x/bWidth);
 		int posY = (int)Math.ceil(y/bHeight);
-		if(filename=="green"){
-			filename="red";
+		if(this.filename=="green"){
+			this.filename="red";
 		}else{
-			filename="green";
+			this.filename="green";
 		}
 		if(posY==0){
 			Element ele = new Element(getResources(), posX, posY, false);
-			ele.setFilename(filename);
+			ele.setFilename(this.filename);
 			ArrayList<String> m = db.getMovePosition(game_id, posX);
 			int i = Integer.parseInt(m.get(0));
 			//Log.d("msg", ""+i);

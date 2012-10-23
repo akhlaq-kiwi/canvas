@@ -89,6 +89,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             do {
                 Element element = new Element(ctx.getResources(), Integer.parseInt(cursor.getString(4)),  Integer.parseInt(cursor.getString(5)), false);
                 // Adding contact to list
+                element.setFilename(cursor.getString(3));
                 elementList.add(element);
             } while (cursor.moveToNext());
         }

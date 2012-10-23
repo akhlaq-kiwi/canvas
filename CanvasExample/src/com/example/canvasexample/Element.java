@@ -26,6 +26,7 @@ public class Element {
     
     public void setFilename(String filename){
     	this.filename = filename;
+    	//Log.d("msg", filename);
     }
     
     public String getPlayer(){
@@ -50,6 +51,7 @@ public class Element {
     
     public void setFileName(String filename){
     	this.filename = filename;
+    	Log.d("msg", this.filename);
     }
     
     public void setPosToY(int posToY){
@@ -90,7 +92,7 @@ public class Element {
     public Element(Resources res, int x, int y, boolean head) {
         if(head){
         	mBitmap = BitmapFactory.decodeResource(res, R.drawable.down_arrow);
-        }else if(filename == "red"){
+        }else if(this.filename == "red"){
         	mBitmap = BitmapFactory.decodeResource(res, R.drawable.red);
         }else{
         	mBitmap = BitmapFactory.decodeResource(res, R.drawable.green);        }
