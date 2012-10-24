@@ -21,7 +21,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	private int rowsY = 9;
 	public static String filename = "red";
 	Context ctx;
-	boolean mDisableTouch = false;
+	public static boolean mDisableTouch = false;
 	private ArrayList<Element> mHead = new ArrayList<Element>();
 	private ArrayList<Element> mElements = new ArrayList<Element>();
 	private ArrayList<Element> tElements = new ArrayList<Element>();
@@ -116,8 +116,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			this.filename="green";
 		}
 		if(posY==0){
-			Element ele = new Element(getResources(), posX, posY, false);
-			ele.setFilename(this.filename);
+			Element ele = new Element(getResources(), posX, posY, false, this.filename);
 			ArrayList<String> m = db.getMovePosition(game_id, posX);
 			int i = Integer.parseInt(m.get(0));
 			//Log.d("msg", ""+i);
@@ -132,7 +131,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	
 	public void drawHead(){
 		for(int i=0; i < rowsX; i++){
-			mHead.add(new Element(getResources(), i,0, true));
+			mHead.add(new Element(getResources(), i,0, true, ""));
 		}
 	}
 	

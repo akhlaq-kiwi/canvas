@@ -51,7 +51,6 @@ public class Element {
     
     public void setFileName(String filename){
     	this.filename = filename;
-    	Log.d("msg", this.filename);
     }
     
     public void setPosToY(int posToY){
@@ -89,13 +88,16 @@ public class Element {
 			return false;
 		}
     }
-    public Element(Resources res, int x, int y, boolean head) {
+    public Element(Resources res, int x, int y, boolean head, String filename) {
+        this.filename = filename;
         if(head){
         	mBitmap = BitmapFactory.decodeResource(res, R.drawable.down_arrow);
-        }else if(this.filename == "red"){
+        }else if(this.filename.equals("red")){
         	mBitmap = BitmapFactory.decodeResource(res, R.drawable.red);
         }else{
-        	mBitmap = BitmapFactory.decodeResource(res, R.drawable.green);        }
+        	mBitmap = BitmapFactory.decodeResource(res, R.drawable.green);
+        }
+        
         this.mX = mBitmap.getWidth()*x;
         this.mY = mBitmap.getHeight()*y;
         this.posX = x;

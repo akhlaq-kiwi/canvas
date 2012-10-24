@@ -87,9 +87,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Element element = new Element(ctx.getResources(), Integer.parseInt(cursor.getString(4)),  Integer.parseInt(cursor.getString(5)), false);
+                Element element = new Element(ctx.getResources(), Integer.parseInt(cursor.getString(4)),  Integer.parseInt(cursor.getString(5)), false, cursor.getString(3));
                 // Adding contact to list
-                element.setFilename(cursor.getString(3));
+                //element.setFilename(cursor.getString(3));
                 elementList.add(element);
             } while (cursor.moveToNext());
         }
@@ -109,10 +109,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	        if (cursor.moveToFirst()) {
 	            do {
 	            	res.add(cursor.getString(0));
+	            	res.add(cursor.getString(1));
+	            	Log.d("msg", cursor.getString(0));
 	            } while (cursor.moveToNext());
 	        }
         }else{
         	res.add("10");
+        	res.add("green");
         }
         return res;
     }
