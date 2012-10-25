@@ -125,7 +125,9 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			ele.setGameId(game_id);
 			ele.setPlayer("11111");
 			ele.setMoving(true);
-			tElements.add(ele);
+			if(i>1){
+				tElements.add(ele);
+			}
 		}
 	}
 	

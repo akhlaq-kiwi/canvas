@@ -31,6 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_FILE = "file_name";
     private static final String KEY_POSX = "pos_x";
     private static final String KEY_POSY = "pos_y";
+    private static final String KEY_MOVING = "moving";
     Context ctx;
  
     public DatabaseHandler(Context context) {
@@ -47,7 +48,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         		+ KEY_PLAYER + " TEXT,"
                 + KEY_FILE + " TEXT,"
                 + KEY_POSX + " INTEGER,"
-                + KEY_POSY + " INTEGER)";
+                + KEY_POSY + " INTEGER,"
+                + KEY_MOVING + " INTEGER)";
         db.execSQL(CREATE_MOVES_TABLE);
     }
  
@@ -71,6 +73,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_FILE, element.getFilename());
         values.put(KEY_POSX, element.getPosX());
         values.put(KEY_POSY, element.getPosY());
+        values.put(KEY_MOVING, 0);
         // Inserting Row
         db.insert(TABLE_MOVES, null, values);
         //db.close(); // Closing database connection
@@ -110,7 +113,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	            do {
 	            	res.add(cursor.getString(0));
 	            	res.add(cursor.getString(1));
-	            	Log.d("msg", cursor.getString(0));
 	            } while (cursor.moveToNext());
 	        }
         }else{
