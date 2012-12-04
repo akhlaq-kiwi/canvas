@@ -47,6 +47,14 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	public void doDraw(Canvas canvas) {
         canvas.drawColor(Color.GRAY);
+        ArrayList<String> res = db.checkMoving(1);
+        String status = res.get(0);
+        
+        if(status.equals("true")){
+        	String poxX = res.get(2);
+        	int x = Integer.parseInt(poxX);
+        	createMovingElement(x, 0, true);
+        }
         //mElements = db.getAllElements();
         synchronized (mElements) {
             for (Element element : mElements) {
@@ -83,7 +91,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
 		if(tElements.size()==0){
-			createMovingElement((int)e.getX(), (int)e.getY());
+			createMovingElement((int)e.getX(), (int)e.getY(), false);
 		}
 		//db.addElement(ele);
 		return super.onTouchEvent(e);
@@ -103,13 +111,18 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 		
 	}
 	
-	public void createMovingElement(int x, int y){
+	public void createMovingElement(int x, int y, boolean exact){
 		mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.down_arrow);
 		int bHeight = mBitmap.getHeight();
 		int bWidth = mBitmap.getWidth();
-		
-		int posX = (int)Math.ceil(x/bWidth);
-		int posY = (int)Math.ceil(y/bHeight);
+		int posX, posY;
+		if(exact){
+			posX = x;
+			posY = 0;
+		}else{
+			posX = (int)Math.ceil(x/bWidth);
+			posY = (int)Math.ceil(y/bHeight);
+		}
 		if(this.filename=="green"){
 			this.filename="red";
 		}else{

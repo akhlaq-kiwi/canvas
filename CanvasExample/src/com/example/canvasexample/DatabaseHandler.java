@@ -121,4 +121,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return res;
     }
+    public ArrayList<String> checkMoving(int game_id){
+    	int id = 0;
+    	ArrayList<String> res = new ArrayList<String>();
+    	String selectQuery = "SELECT * FROM " + TABLE_MOVES + " where game_id="+game_id+" and moving=1 limit 0,1";
+    	SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor.getCount()!=0){
+	        if (cursor.moveToFirst()) {
+	            do {
+	            	res.add("true");
+	            	res.add(cursor.getString(0));
+	            	id=cursor.getInt(0);
+	            	res.add(cursor.getString(4));
+	            } while (cursor.moveToNext());
+	        }
+	        //String updateQuery = "UPDATE " + TABLE_MOVES + " set moving=0 where id='"+id+"'";
+	        //Log.d("msg", updateQuery);
+	        //db.rawQuery(updateQuery, null);
+	        //ContentValues values = new ContentValues();
+	        //values.put(KEY_MOVING, 0);
+	        //db.update(TABLE_MOVES, values, KEY_ID + " = ?", new String[] { String.valueOf(id) });
+	        db.delete(TABLE_MOVES, KEY_ID + " = ?",new String[] { String.valueOf(id) });
+	    	
+        }else{
+        	res.add("false");
+        }
+        //db.close();
+        return res;
+    }
 }
