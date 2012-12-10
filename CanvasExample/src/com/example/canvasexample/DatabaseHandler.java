@@ -4,6 +4,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
@@ -51,6 +54,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_POSY + " INTEGER,"
                 + KEY_MOVING + " INTEGER)";
         db.execSQL(CREATE_MOVES_TABLE);
+        
     }
  
     // Upgrading database
@@ -73,16 +77,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_FILE, element.getFilename());
         values.put(KEY_POSX, element.getPosX());
         values.put(KEY_POSY, element.getPosY());
-        values.put(KEY_MOVING, 0);
+        values.put(KEY_MOVING, 1);
         // Inserting Row
         db.insert(TABLE_MOVES, null, values);
         //db.close(); // Closing database connection
+        
+        JSONObject json_data = new JSONObject();
+		try {
+			json_data.put("game_id", element.getGameId());
+			json_data.put("turn_by", element.getPlayer());
+			json_data.put("file_name", element.getPlayer());
+			json_data.put("status", 1);
+			json_data.put("position_x", element.getPosX());
+			json_data.put("position_y", element.getPosY());
+			json_data.put("moving", 1);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String response = Utils.postData("turns.php", json_data.toString());
+		Log.d("response", response);
     }
     
     public ArrayList<Element> getAllElements() {
     	ArrayList<Element> elementList = new ArrayList<Element>();
         // Select All Query
-        String selectQuery = "SELECT * FROM " + TABLE_MOVES;
+        String selectQuery = "SELECT * FROM " + TABLE_MOVES + " where moving = 0";
  
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -121,10 +141,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return res;
     }
-    public ArrayList<String> checkMoving(int game_id){
+    public Boolean checkForMyTurn(int game_id, String user_id){
+    	Boolean res = true;
+    	String selectQuery = "SELECT user FROM " + TABLE_MOVES + " where game_id='" + game_id + "' order by id desc limit 0,1";
+    	
+    	SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor.getCount()!=0){
+        	if (cursor.moveToFirst()) {
+	            do {
+	            	String user = cursor.getString(0);
+	            	if(user.equals(user_id)){
+	            		res = false;
+	            	}
+	            } while (cursor.moveToNext());
+	        }
+        }
+        return res;    	
+    }
+    
+    public ArrayList<String> checkMoving(int game_id, String user_id){
     	int id = 0;
     	ArrayList<String> res = new ArrayList<String>();
-    	String selectQuery = "SELECT * FROM " + TABLE_MOVES + " where game_id="+game_id+" and moving=1 limit 0,1";
+    	String selectQuery = "SELECT * FROM " + TABLE_MOVES + " where game_id="+game_id+" and user != " + user_id + " and moving=1 limit 0,1";
     	SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         if(cursor.getCount()!=0){
@@ -132,22 +171,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	            do {
 	            	res.add("true");
 	            	res.add(cursor.getString(0));
-	            	id=cursor.getInt(0);
+	            	id = cursor.getInt(0);
 	            	res.add(cursor.getString(4));
 	            } while (cursor.moveToNext());
 	        }
-	        //String updateQuery = "UPDATE " + TABLE_MOVES + " set moving=0 where id='"+id+"'";
-	        //Log.d("msg", updateQuery);
-	        //db.rawQuery(updateQuery, null);
-	        //ContentValues values = new ContentValues();
-	        //values.put(KEY_MOVING, 0);
-	        //db.update(TABLE_MOVES, values, KEY_ID + " = ?", new String[] { String.valueOf(id) });
-	        db.delete(TABLE_MOVES, KEY_ID + " = ?",new String[] { String.valueOf(id) });
+	        ContentValues values = new ContentValues();
+	        values.put(KEY_MOVING, 2);
+	        db.update(TABLE_MOVES, values, KEY_ID + " = ?", new String[] { String.valueOf(id)});
+	        //db.delete(TABLE_MOVES, KEY_ID + " = ?", new String[] { String.valueOf(id) });
 	    	
         }else{
         	res.add("false");
         }
         //db.close();
         return res;
+    }
+    public Boolean checkMoved(int game_id){
+    	Boolean res = false;
+    	String selectQuery = "SELECT * FROM " + TABLE_MOVES + " where game_id='" + game_id + "' and moving=2 order by id desc limit 0,1";
+    	
+    	SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor.getCount()!=0){
+        	res = true;
+	    }
+        return res;    	
+    }
+    public void updateMoved(int game_id){
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	ContentValues values = new ContentValues();
+        values.put(KEY_MOVING, 0);
+        db.update(TABLE_MOVES, values, KEY_MOVING + " = ?", new String[] {"2"});
     }
 }

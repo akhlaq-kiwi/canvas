@@ -17,6 +17,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	public ViewThread mThread;
 	private Bitmap mBitmap;
 	private int mx, my, game_id = 1;
+	String me = "11111";
 	private int rowsX = 9;
 	private int rowsY = 9;
 	public static String filename = "red";
@@ -47,7 +48,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	public void doDraw(Canvas canvas) {
         canvas.drawColor(Color.GRAY);
-        ArrayList<String> res = db.checkMoving(1);
+        ArrayList<String> res = db.checkMoving(game_id, me);
         String status = res.get(0);
         
         if(status.equals("true")){
@@ -72,7 +73,14 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
             	if(tElement.movingState()){
             		tElement.doDraw(canvas, this);
             	}else{
-            		db.addElement(tElement);
+            		
+            		if(db.checkMoved(game_id)){
+            			Log.d("msg", "hello1");
+            			db.updateMoved(game_id);
+            		}else{
+            			Log.d("msg", "hello");
+            			db.addElement(tElement);
+            		}
             		mElements.add(tElement);
             		//mElements = db.getAllElements();
             		synchronized (mElements) {
@@ -90,7 +98,9 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	
 	@Override
 	public boolean onTouchEvent(MotionEvent e) {
-		if(tElements.size()==0){
+		Boolean myturn = db.checkForMyTurn(game_id, me);
+		
+		if(tElements.size()==0 && myturn){
 			createMovingElement((int)e.getX(), (int)e.getY(), false);
 		}
 		//db.addElement(ele);
@@ -136,7 +146,7 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 			ele.setPosToY(i-1);
 			ele.setPosToX(posX);
 			ele.setGameId(game_id);
-			ele.setPlayer("11111");
+			ele.setPlayer(me);
 			ele.setMoving(true);
 			if(i>1){
 				tElements.add(ele);
