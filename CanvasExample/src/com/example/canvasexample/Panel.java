@@ -18,8 +18,8 @@ public class Panel extends SurfaceView implements SurfaceHolder.Callback {
 	private Bitmap mBitmap;
 	private int mx, my, game_id = 1;
 	String me = "11112";
-	private int rowsX = 9;
-	private int rowsY = 9;
+	private int rowsX = 7;
+	private int rowsY = 6;
 	public static String filename = "";
 	Context ctx;
 	public static boolean mDisableTouch = false;

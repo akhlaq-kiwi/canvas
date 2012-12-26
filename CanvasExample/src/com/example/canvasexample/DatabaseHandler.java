@@ -159,7 +159,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	            } while (cursor.moveToNext());
 	        }
         }else{
-        	res.add("10");
+        	res.add("7");
         	res.add("green");
         }
         return res;

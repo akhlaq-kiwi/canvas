@@ -1,22 +1,79 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/player_two"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@layout/repeat"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello" />
-    
     <LinearLayout 
-      android:layout_margin="10dp"
       android:layout_width="fill_parent"
-      android:layout_height="500dp"
-      android:id="@+id/canvas">
+      android:layout_height="50dp"
+      android:background="@drawable/drop4_header">        
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/player_one"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" >
+
+      <ImageView
+          android:layout_width="50dp"
+          android:layout_height="50dp"
+          android:src="@drawable/ic_launcher" />
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true"
+          android:src="@drawable/player1" />
+      <TextView 
+          android:layout_width="80dp"
+          android:layout_height="50dp"
+          android:text="Akhlaq Ahmad"
+          android:layout_alignParentRight="true"
+          android:padding="5dp"
+          android:textColor="#ffffff"
+       />
+        
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:id="@+id/canvas"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_margin="10dp" >
         
     </LinearLayout>
 
-    
+    <RelativeLayout 
+      android:layout_width="fill_parent"
+      android:id="@id/player_two"
+      android:layout_marginLeft="10dp"
+	  android:layout_marginRight="10dp"
+	  android:gravity = "bottom"
+	  
+      android:layout_height="fill_parent">
+
+      <ImageView
+          android:layout_width="50dp"
+          android:layout_height="50dp"
+          android:src="@drawable/ic_launcher" />
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerHorizontal="true"
+          android:src="@drawable/player2" />
+      <TextView 
+          android:layout_width="80dp"
+          android:layout_height="50dp"
+          android:text="Akhlaq Ahmad"
+          android:layout_alignParentRight="true"
+          android:padding="5dp"
+          android:textColor="#ffffff"
+       />
+        
+    </RelativeLayout>
 
 </LinearLayout>
