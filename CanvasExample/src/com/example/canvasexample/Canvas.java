@@ -28,11 +28,11 @@ public class Canvas extends Activity {
        display.getMetrics(outMetrics);
 
        float density  = getResources().getDisplayMetrics().density;
-       int sHeight = (int) ((int)outMetrics.heightPixels / density);
-       int sWidth  = (int) ((int)outMetrics.widthPixels / density);
+       int sHeight = ((int)outMetrics.heightPixels);
+       int sWidth  = ((int)outMetrics.widthPixels);
        Log.d("msg", "H: "+sHeight+" W: "+sWidth);
-       int canvasHeight = (sHeight);
-       int canvasWidth = (sWidth);
+       int canvasHeight = (sHeight-400);
+       int canvasWidth = (sWidth-30);
        
        Log.d("msg", "H: "+canvasHeight+" W: "+canvasWidth);
        
